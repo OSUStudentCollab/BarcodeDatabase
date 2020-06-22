@@ -1,109 +1,82 @@
-import java.io.BufferedReader;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
-/**
- * This is a utility class that helps to read data from a barcode
- */
 public class BarcodeUtilities {
 
     /**
-     * Runs a python script
+     * Take a QR code file and return the data the qr code has. This is based on
+     * "callicoder.com/qr-code-reader-scanner-in-java-using-zxing/"
      * 
-     * @param scriptLocation Location of Python Script to run
+     * @param qrCodeimage QR code to decode
+     * @return Data from QR code
+     * @throws IOException
      */
-    private static void executePythonScript(String scriptLocation) {
+    public static String decodeQRCode(File qrCodeimage) {
 
-        String s = null;
-
+        /**
+         * Read and process QR code for decoding
+         */
+        BufferedImage bufferedImage = null;
         try {
-            /*
-             * Run the Python Program
-             */
-            Process p = Runtime.getRuntime().exec("python " + scriptLocation);
+            bufferedImage = ImageIO.read(qrCodeimage);
+        } catch (IOException e1) {
+            System.err.println("Could not read file");
+            System.exit(-1);
+        }
+        LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
-            /*
-             * Capture any terminal outputs from the python program
-             */
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-            /*
-             * Capture any error messages
-             */
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-            // // read the output from the command
-            // System.out.println("Here is the standard output of the command:\n");
-            // while ((s = stdInput.readLine()) != null) {
-            // System.out.println(s);
-            // }
-
-            // read any errors from the attempted command
-            System.out.println("Here is the standard error of the command (if any):\n");
-            while ((s = stdError.readLine()) != null) {
-                System.out.println(s);
-            }
-        } catch (IOException e) {
-            System.out.println("exception happened - here's what I know: ");
-            e.printStackTrace();
+        /**
+         * Try to decode the QR code
+         */
+        try {
+            Result result = new MultiFormatReader().decode(bitmap);
+            return result.getText();
+        } catch (NotFoundException e) {
+            System.out.println("Could not find a QR code in the image");
+            return null;
         }
     }
 
     /**
-     * Runs a python script and then returns the terminal outputs from the python
-     * script
+     * Take a QR code file location and return the data the qr code has. This is
+     * based on "callicoder.com/qr-code-reader-scanner-in-java-using-zxing/"
      * 
-     * @param scriptLocation Location of Python Script to run
-     * @return Any outputs the python script made to the terminal
+     * @param qrCodeimage QR code to decode
+     * @return Data from QR code
+     * @throws IOException
      */
-    private static String executePythonScriptAndGetTerminalOutput(String scriptLocation) {
+    public static String decodeQRCode(String qrCodeLocation) {
 
-        String s = null;
-        StringBuilder output = new StringBuilder();
+        File qrCodeimage = new File(qrCodeLocation);
 
+        /**
+         * Read and process QR code for decoding
+         */
+        BufferedImage bufferedImage = null;
         try {
-            /*
-             * Run the Python Program
-             */
-            Process p = Runtime.getRuntime().exec("python " + scriptLocation);
-
-            /*
-             * Capture any terminal outputs from the python program
-             */
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-            /*
-             * Capture any error messages
-             */
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-            // read the output from the command
-            while ((s = stdInput.readLine()) != null) {
-                output.append(s);
-            }
-
-            // read any errors from the attempted command
-            System.out.println("Here is the standard error of the command (if any):\n");
-            while ((s = stdError.readLine()) != null) {
-                System.out.println(s);
-            }
-        } catch (IOException e) {
-            System.out.println("exception happened - here's what I know: ");
-            e.printStackTrace();
+            bufferedImage = ImageIO.read(qrCodeimage);
+        } catch (IOException e1) {
+            System.err.println("Could not read file");
+            System.exit(-1);
         }
+        LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
-        return output.toString();
+        /**
+         * Try to decode the QR code
+         */
+        try {
+            Result result = new MultiFormatReader().decode(bitmap);
+            return result.getText();
+        } catch (NotFoundException e) {
+            System.out.println("Could not find a QR code in the image");
+            return null;
+        }
     }
-
-    /**
-     * This program needs there to be an image titled "toDecode.png" to exist in the
-     * Images folder. After which point it will return the data from the given
-     * barcode.
-     * 
-     * @return Barcode data
-     */
-    public static String getBarcodeInformation() {
-        return executePythonScriptAndGetTerminalOutput("Python/BarcodeReader.py");
-    }
-
 }
