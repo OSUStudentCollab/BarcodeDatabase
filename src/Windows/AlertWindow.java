@@ -1,3 +1,4 @@
+package Windows;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,7 +26,6 @@ public class AlertWindow
      *
      * @param title The title of the window
      * @param message Intended message for user to read
-     * @return 
      */
     public void display(String title, String message)
     {
