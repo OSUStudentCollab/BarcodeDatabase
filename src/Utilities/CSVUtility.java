@@ -2,6 +2,7 @@ package Utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -24,17 +25,76 @@ public class CSVUtility
 		String headerText;
 		
 		{
+			//Get the top-most "header" element from CSV file
 			headerText = textReader(CSVFileLocation).nextLine();
 		}
 		
-		String[] header = new String[1 + countCharacters(headerText, ',')];
+		//Return header information
+		return fillArray(headerText, 1 + countCharacters(headerText, ','));
+	}
+	
+	/**
+	 * Take a csv file, search for a specific element and return all information on that line
+	 *
+	 * @param size            Size of array, i.e data points in a given row
+	 * @param columnToSearch  Column to look in
+	 * @param dataToLookFor   Data point to look for
+	 * @param CSVFileLocation Location of file to read
+	 * @return An array containing elements from a row matching the columnToSearch and dataToLookFor; Returns an empty
+	 * array if no such element is found
+	 */
+	public static String[] readSpecificRow(int size, int columnToSearch, String dataToLookFor, String CSVFileLocation)
+	{
+		String[] data = new String[size];
+		Scanner csvToSearch = textReader(CSVFileLocation);
 		
-		for (int i = 0; i < header.length; i++)
+		
+		while (csvToSearch.hasNext())
 		{
-			header[i] = readColumnnFromCSVFormat(headerText, i);
+			//Read the next line in the csv file
+			String rowData = csvToSearch.nextLine();
+			
+			//Check if element in this row matches search criteria
+			String dataFound = readColumnnFromCSVFormat(rowData, columnToSearch);
+			if (dataFound.equals(dataToLookFor))
+			{
+				data = fillArray(rowData, data.length);
+				break;
+			}
 		}
 		
-		return header;
+		return data;
+	}
+	
+	/**
+	 * Look for the first instance of searchTerm in array
+	 *
+	 * @param array      Array to search
+	 * @param searchTerm Term to look for
+	 * @return Index of searchTerm in array; -1 if searchTerm is not in array
+	 */
+	public static int positionOfElementInArray(String[] array, String searchTerm)
+	{
+		return Arrays.asList(array).indexOf(searchTerm);
+	}
+	
+	/**
+	 * Takes a csv string and returns an array separating the data from the csv string
+	 *
+	 * @param csvText CSV formatted String
+	 * @param size    Size of array, must match size of CSV string
+	 * @return An array containing data from csvText
+	 */
+	private static String[] fillArray(String csvText, int size)
+	{
+		String[] array = new String[size];
+		
+		for (int i = 0; i < array.length; i++)
+		{
+			array[i] = readColumnnFromCSVFormat(csvText, i);
+		}
+		
+		return array;
 	}
 	
 	/**
