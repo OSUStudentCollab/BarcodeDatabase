@@ -1,8 +1,5 @@
 package Utilities;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static Utilities.Utilities.countCharacters;
