@@ -1,9 +1,10 @@
 package Utilities;
 
+import java.util.List;
 import java.util.Scanner;
 
 import static Utilities.Utilities.countCharacters;
-import static Utilities.Utilities.textReader;
+import static Utilities.Utilities.textDocAsScanner;
 
 /**
  * This is a utility class that helps to read and write to and from a csv file
@@ -26,7 +27,7 @@ public class CSVUtilities
 		
 		{
 			//Get the top-most "header" element from CSV file
-			headerText = textReader(CSVFileLocation).nextLine();
+			headerText = textDocAsScanner(CSVFileLocation).nextLine();
 		}
 		
 		//Return header information
@@ -43,24 +44,49 @@ public class CSVUtilities
 	 * @return An array containing elements from a row matching the columnToSearch and dataToLookFor; Returns an empty
 	 * array if no such element is found
 	 */
-	public static String[] readSpecificRow(int size, int columnToSearch, String dataToLookFor, String CSVFileLocation)
+	public static String[] readSpecificRowFromFile(int size, int columnToSearch, String dataToLookFor, String CSVFileLocation)
 	{
 		String[] data = new String[size];
-		Scanner csvToSearch = textReader(CSVFileLocation);
-		
+		Scanner csvToSearch = textDocAsScanner(CSVFileLocation);
 		
 		while (csvToSearch.hasNext())
 		{
 			//Read the next line in the csv file
 			String rowData = csvToSearch.nextLine();
 			
-			//Check if element in this row matches search criteria
-			String dataFound = readColumnnFromCSVFormat(rowData, columnToSearch);
-			if (dataFound.equals(dataToLookFor))
+			if (readColumnnFromCSVFormat(rowData, columnToSearch).equals(dataToLookFor))
 			{
 				data = fillArray(rowData, data.length);
 				break;
 			}
+		}
+		
+		return data;
+	}
+	
+	/**
+	 * Take an list and search through the array for the element the user is searching for
+	 *
+	 * @param size           Size of array, i.e data points in a given row
+	 * @param columnToSearch Column to look in
+	 * @param dataToLookFor  Data point to look for
+	 * @param csvList        List to check
+	 * @return An array containing elements from a row matching the columnToSearch and dataToLookFor; Returns an empty
+	 * * array if no such element is found
+	 */
+	public static String[] readSpecificRowFromList(int size, int columnToSearch, String dataToLookFor, List<String> csvList)
+	{
+		String[] data = new String[size];
+		
+		for (String item : csvList)
+		{
+			
+			if (item.contains(dataToLookFor))
+			{
+				data = fillArray(item, data.length);
+				break;
+			}
+			
 		}
 		
 		return data;
