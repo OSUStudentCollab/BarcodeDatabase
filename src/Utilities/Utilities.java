@@ -2,7 +2,13 @@ package Utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -40,7 +46,7 @@ public class Utilities
 	 * @param location File location
 	 * @return Scanner containing data from a file
 	 */
-	public static Scanner textReader(String location)
+	public static Scanner textDocAsScanner(String location)
 	{
 		//Make a scanner
 		Scanner scanner = null;
@@ -56,6 +62,28 @@ public class Utilities
 		
 		//Return text
 		return scanner;
+	}
+	
+	/**
+	 * Takes a text document and separates each line and puts it into a list
+	 *
+	 * @param location File location
+	 * @return a List containing every line of a text document
+	 */
+	public static List<String> textDocAsList(String location)
+	{
+		Path path = Paths.get(location);
+		List<String> lines = null;
+		
+		try
+		{
+			lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+		} catch (IOException e)
+		{
+			System.err.println("Error reading file");
+		}
+		
+		return lines;
 	}
 	
 	/**
