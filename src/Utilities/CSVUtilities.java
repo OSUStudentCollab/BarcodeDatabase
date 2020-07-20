@@ -1,5 +1,7 @@
 package Utilities;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -61,6 +63,7 @@ public class CSVUtilities
 			}
 		}
 		
+		csvToSearch.close();
 		return data;
 	}
 	
@@ -80,16 +83,40 @@ public class CSVUtilities
 		
 		for (String item : csvList)
 		{
-			
 			if (item.contains(dataToLookFor))
 			{
 				data = fillArray(item, data.length);
 				break;
 			}
-			
 		}
 		
 		return data;
+	}
+	
+	/**
+	 * @param locationOfCSV Location of file to read
+	 * @param information   Information to append to CSV file
+	 */
+	public static void appendNewData(String locationOfCSV, String[] information)
+	{
+		FileWriter fileToAppendTo = Utilities.textDocAsFileWriter(locationOfCSV);
+		
+		try
+		{
+			fileToAppendTo.write("\n" + Utilities.arrayToString(information,","));
+		} catch (IOException e)
+		{
+			System.err.println("Error writing to file");
+		}
+		
+		try
+		{
+			fileToAppendTo.close();
+		} catch (IOException e)
+		{
+			System.err.println("Could not close file");
+			return;
+		}
 	}
 	
 	/**

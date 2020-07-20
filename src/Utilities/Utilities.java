@@ -2,6 +2,7 @@ package Utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -51,7 +52,7 @@ public class Utilities
 		//Make a scanner
 		Scanner scanner = null;
 		
-		//Read file
+		//Initialize scanner
 		try
 		{
 			scanner = new Scanner(new File(location));
@@ -62,6 +63,29 @@ public class Utilities
 		
 		//Return text
 		return scanner;
+	}
+	
+	/**
+	 * Make a FileWriter capable of writing to a file at "location"
+	 *
+	 * @param location File location
+	 * @return A writeable FileWriter
+	 */
+	public static FileWriter textDocAsFileWriter(String location)
+	{
+		//Make FileWriter
+		FileWriter fw = null;
+		
+		//Initialize FileWriter
+		try
+		{
+			fw = new FileWriter((new File(location)), true);
+		} catch (IOException e)
+		{
+			System.err.println("File not found");
+		}
+		
+		return fw;
 	}
 	
 	/**
@@ -149,6 +173,28 @@ public class Utilities
 		}
 		
 		return array;
+	}
+	
+	/**
+	 * Take an array and return a String representation of the array
+	 *
+	 * @param array     Array to convert
+	 * @param separator Characters to put in-between each index in the array
+	 * @return Indices in array as a single string
+	 */
+	public static String arrayToString(String[] array, String separator)
+	{
+		StringBuilder stringForm = new StringBuilder();
+		
+		for (int i = 0; i < array.length; i++)
+		{
+			stringForm.append(array[i]);
+			
+			if(i+1 < array.length)
+				stringForm.append(separator);
+		}
+		
+		return stringForm.toString();
 	}
 	
 	/**
