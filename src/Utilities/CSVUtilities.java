@@ -2,6 +2,8 @@ package Utilities;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
@@ -56,7 +58,7 @@ public class CSVUtilities
 			//Read the next line in the csv file
 			String rowData = csvToSearch.nextLine();
 			
-			if (readColumnnFromCSVFormat(rowData, columnToSearch).equals(dataToLookFor))
+			if (readRowFromCSVFormat(rowData, columnToSearch).equals(dataToLookFor))
 			{
 				data = fillArray(rowData, data.length);
 				break;
@@ -81,6 +83,8 @@ public class CSVUtilities
 	{
 		String[] data = new String[size];
 		
+		//TODO use columnToSearch to only search one column!
+		
 		for (String item : csvList)
 		{
 			if (item.contains(dataToLookFor))
@@ -91,6 +95,28 @@ public class CSVUtilities
 		}
 		
 		return data;
+	}
+	
+	/**
+	 * Modify a line in an existing CSV file
+	 *
+	 * @param lineNumber Line to replace (Lines start at 0)
+	 * @param newData New data
+	 * @param locationOfCSV CSV file to modify
+	 */
+	public static void replaceLineFromList(int lineNumber, String newData, String locationOfCSV)
+	{
+		//Read the csv file
+		List<String> csv = Utilities.textDocAsList(locationOfCSV);
+		csv.set(lineNumber, newData);
+		
+		try
+		{
+			Files.write(Paths.get(locationOfCSV), csv);
+		} catch (IOException e)
+		{
+			System.err.println("Could not save to csv location : replaceLineFromList");
+		}
 	}
 	
 	/**
@@ -106,7 +132,7 @@ public class CSVUtilities
 			fileToAppendTo.write("\n" + Utilities.arrayToString(information,","));
 		} catch (IOException e)
 		{
-			System.err.println("Error writing to file");
+			System.err.println("Error writing to file : appendNewData");
 		}
 		
 		try
@@ -114,7 +140,7 @@ public class CSVUtilities
 			fileToAppendTo.close();
 		} catch (IOException e)
 		{
-			System.err.println("Could not close file");
+			System.err.println("Could not close file : appendNewData");
 			return;
 		}
 	}
@@ -138,8 +164,11 @@ public class CSVUtilities
 	 * @param columnNumber Going from 0-n the column to read
 	 * @return Text stored in the columnNumber of the given CSVText
 	 */
-	private static String readColumnnFromCSVFormat(String text, int columnNumber)
+	private static String readRowFromCSVFormat(String text, int columnNumber)
 	{
-		return Utilities.readColumnnFromText(text, columnNumber, ',');
+		return Utilities.readRowFromText(text, columnNumber, ',');
 	}
+	
+	//TODO implement method to search for specific element in CSV
+	//TODO implement method to write to file (save) while using a list
 }
