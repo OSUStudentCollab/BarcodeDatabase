@@ -58,7 +58,7 @@ public class Utilities
 			scanner = new Scanner(new File(location));
 		} catch (FileNotFoundException e)
 		{
-			System.err.println("File not found");
+			System.err.println("File not found : textDocAsScanner");
 		}
 		
 		//Return text
@@ -82,7 +82,7 @@ public class Utilities
 			fw = new FileWriter((new File(location)), true);
 		} catch (IOException e)
 		{
-			System.err.println("File not found");
+			System.err.println("File not found : textDocAsFileWriter");
 		}
 		
 		return fw;
@@ -104,22 +104,22 @@ public class Utilities
 			lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 		} catch (IOException e)
 		{
-			System.err.println("Error reading file");
+			System.err.println("Error reading file : textDocAsList");
 		}
 		
 		return lines;
 	}
 	
 	/**
-	 * Takes one line of a text document and returns the element at the specified column.
-	 * Columns are determined by the specified separator character.
+	 * Takes one line of a text document and returns the element at the specified row.
+	 * Rows are determined by the specified separator character.
 	 *
 	 * @param text         String to read from
 	 * @param columnNumber Going from 0-n (n being number of "columns" made by separators), the column to read
 	 * @param separator    A character that distinguishes 1 column from another
 	 * @return Text stored in the columnNumber of the given string
 	 */
-	public static String readColumnnFromText(String text, int columnNumber, char separator)
+	public static String readRowFromText(String text, int columnNumber, char separator)
 	{
 		StringBuilder element = new StringBuilder();
 		int separatorsFound = 0;
@@ -169,7 +169,7 @@ public class Utilities
 		
 		for (int i = 0; i < array.length; i++)
 		{
-			array[i] = readColumnnFromText(text, i, separator);
+			array[i] = readRowFromText(text, i, separator);
 		}
 		
 		return array;
