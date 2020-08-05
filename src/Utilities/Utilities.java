@@ -19,6 +19,8 @@ import java.util.Scanner;
  */
 public class Utilities
 {
+	//Reading\\
+	
 	/**
 	 * Count instances of characterToCount in text
 	 *
@@ -163,7 +165,7 @@ public class Utilities
 	 * @param separator A character that distinguishes 1 column from another
 	 * @return An array containing column data from the given text
 	 */
-	public static String[] fillArray(String text, int size, char separator)
+	public static String[] fillArrayFromText(String text, int size, char separator)
 	{
 		String[] array = new String[size];
 		
@@ -182,7 +184,7 @@ public class Utilities
 	 * @param separator Characters to put in-between each index in the array
 	 * @return Indices in array as a single string
 	 */
-	public static String arrayToString(String[] array, String separator)
+	public static String arrayToString(String[] array, char separator)
 	{
 		StringBuilder stringForm = new StringBuilder();
 		
@@ -190,7 +192,7 @@ public class Utilities
 		{
 			stringForm.append(array[i]);
 			
-			if(i+1 < array.length)
+			if (i + 1 < array.length)
 				stringForm.append(separator);
 		}
 		
