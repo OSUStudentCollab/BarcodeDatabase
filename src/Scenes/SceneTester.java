@@ -2,7 +2,6 @@ package Scenes;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 /**
@@ -31,7 +30,8 @@ public final class SceneTester extends Application
     public void start(Stage primaryStage) throws Exception
     {
 	primaryStage.setTitle("Scene tester");
-	Scene toBeShown = new GenericBackNextScene();
+	Scene toBeShown = new StartScene();
+//	Scene toBeShown = new FirstTimeFileSetupScene();
 	
 	primaryStage.setScene(toBeShown);
 	primaryStage.show();
