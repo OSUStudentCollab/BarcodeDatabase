@@ -1,3 +1,5 @@
+package Windows;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 /**
@@ -22,10 +24,10 @@ public final class MenuInterface extends Application
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception
+    public void start(Stage primaryStage)
     {
 	//Starting point
-	//Instantiate MVC objects for MenuInterface
+	//Instantiate MVC objects for Windows.MenuInterface
 	MenuInterfaceModel model = new MenuInterfaceModel();
 	MenuInterfaceView view = new MenuInterfaceView();
 	MenuInterfaceController controller = new MenuInterfaceController(model, view);
